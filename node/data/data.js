@@ -1,4 +1,7 @@
-const food = []
-const daily = []
+const foods = []
+const dailys = []
+const foodCarts = []
+const dailyCarts = []
 
-module.exports = {food, daily}
+
+module.exports = {foods, dailys, foodCarts, dailyCarts}
