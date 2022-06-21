@@ -1,8 +1,8 @@
 const express = require('express');
 const routes = express.Router();
 
-let {foods, dailys, foodCarts, dailyCarts, foodWarnings} = require('../data/data');
-const {checkDate, checkFoodNum, checkDailyNum,writebackup} = require('./method');
+let {foods, dailys, foodCarts, dailyCarts, foodWarnings} = require('../../data/data');
+const {checkDate, checkFoodNum, checkDailyNum,writebackup} = require('../method');
 
 routes.get('/', (req, res) => {
     switch(req.query.array){
@@ -22,16 +22,6 @@ routes.get('/', (req, res) => {
     }
 })
 
-routes.get('/carts' , (req, res) => {
-    switch(req.query.array){
-        case "food":
-            res.status(200).json(foodCarts);
-            break;
-
-        case "daily":
-            res.status(200).json(dailyCarts);
-    }
-})
 
 
 routes.get('/foodwarnings', (req, res) => {
@@ -73,30 +63,6 @@ routes.post('/', (req, res) => {
     }
 })
 
-routes.post('/carts', (req, res) => {
-    const newData  = req.body;
-    switch(req.query.array){
-        case "food":
-            if(!newData.name){
-                return res.status(400).json({success: false, message: "Missing info"});
-            }
-
-            foodCarts.push(newData)
-            writebackup("foodCarts.json", foodCarts);
-            res.status(200).send({success: true, data:foodCarts});
-            // console.log(foods)
-            break;
-            
-        case "daily":
-            if(!newData.name){
-                return res.status(400).json({success: false, message: "Missing info"});
-            }
-            dailyCarts.push(newData)
-            writebackup("dailyCarts.json", dailyCarts);
-            res.status(200).send({success: true, data:dailyCarts});
-
-    }
-})
 
 routes.put('/',(req,res) => {
     switch(req.query.array){
@@ -182,32 +148,5 @@ routes.delete('/',(req,res) => {
 })
 
 
-routes.delete('/carts',(req,res) => {
-    if(!req.body.name)
-            return res.status(404).json({success: false, message: "Missing info"});
-    switch(req.query.array){
-        case "food":
-            const food = foodCarts.find((food) => food.id === req.body.id);
-            if(!food)
-                return res.status(404).json({success: false, message: "Food not found"});
-            else{
-                const newFoodCarts = foodCarts.filter((food) => food.id !== req.body.id);
-                writebackup("foodCarts.json", newFoodCarts);
-                res.status(200).json({success: true, data: newFoodCarts});
-            }
-            break;
-
-        case "daily":
-            const daily = dailyCarts.find((daily) => daily.id === req.body.id);
-            if(!daily)
-                return res.status(404).json({success: false, message: "Daily not found"});
-            else{
-                const newDailyCarts = dailyCarts.filter((daily) => daily.id !== req.body.id);
-                writebackup("dailyCarts.json", newDailyCarts);
-                res.status(200).json({success: true, data: newDailyCarts});
-            }
-    }
-})
-           
 
 module.exports = routes
