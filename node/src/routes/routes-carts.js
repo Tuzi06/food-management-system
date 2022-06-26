@@ -1,8 +1,8 @@
 const express = require('express');
 const routesCart = express.Router();
 
-let { foodCarts, dailyCarts,} = require('../../../data/data');
-const {writebackup} = require('../../method');
+let { foodCarts, dailyCarts,} = require('../../data/data');
+const {writebackup} = require('../method');
 
 
 routesCart.get('/' , (req, res) => {
